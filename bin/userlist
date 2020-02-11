@@ -1,10 +1,6 @@
 #!/bin/bash
 
-#USER="$@"
 USERLIST=$HOME/.batbot/user_list
-
-#ID=$(echo $USER | awk -F":" '{printf $1}')
-#NAME=$(echo $USER | awk -F":" '{printf $2}')
 
 if [[ $@ =~ (.*)":"(.*) ]]; then
 	ID=${BASH_REMATCH[1]}
@@ -16,4 +12,11 @@ if [[ $@ =~ (.*)":"(.*) ]]; then
 	if [[ $(grep $ID $USERLIST) == "" ]]; then
 		echo "$ID:$NAME" >> $USERLIST
 	fi
+fi
+
+ALLUSER=/root/.batbot/allowed_users
+
+if [[ $(grep -x "$ID" $ALLUSER |wc -l) -eq 1 ]]; then
+	echo "Utente $ID giÃ  presente"
+#	curl -s --data "chat_id=$ID" --data-urlencode 'reply_markup={"keyboard":[["/CMD1","/CMD2"],["/CMD3"],["/CMD4","/CMD5","/CMD6","/CMD7"],["/CMD8"]]}' --data-urlencode 'text='"Ecco la tastiera per i comandi." 'https://api.telegram.org/bot328984231:AAEY7zv0gMuV9nmiN59E_Dk2P7D_Wo_pXps/sendMessage' > /dev/null
 fi
